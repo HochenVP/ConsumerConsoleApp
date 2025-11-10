@@ -1,14 +1,9 @@
-﻿using MassTransit;
-
-namespace Contract.Events
+﻿namespace ConsumerConsoleApp.Events.Parameters
 {
     /// <summary>
-    /// 執行照片分析
-    /// class名稱必須與事件總線的名稱和appsetting一致
+    /// AllPhotoOriginalAnalysis 執行參數
     /// </summary>
-    [MessageUrn("scheme:publish-command", useDefaultPrefix: false)]
-    [EntityName("AllPhotoOriginalAnalysis")]
-    class AllPhotoOriginalAnalysis
+    public class AllPhotoAnalysisPara
     {
         /// <summary>
         /// 正臉圖片Guid
@@ -48,4 +43,6 @@ namespace Contract.Events
         /// </summary>
         public string CustomerNo { get; set; }
     }
+
+
 }
