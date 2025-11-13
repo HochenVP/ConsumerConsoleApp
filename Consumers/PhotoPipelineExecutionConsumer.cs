@@ -1,18 +1,18 @@
-﻿using ConsumerConsoleApp.Evemts;
+﻿using ConsumerConsoleApp.Events;
 using ConsumerConsoleApp.Helper;
 using MassTransit;
 
 namespace ConsumerConsoleApp.Consumers
 {
     /// <summary>
-    /// 消費者（Consumer），用於處理 <see cref="AllPhotoOriginalAnalysisCommand"/> 訊息。
+    /// 消費者（Consumer），用於處理 <see cref="PhotoPipelineExecuteCommand"/> 訊息。
     /// 當訊息總線（Message Bus）接收到該命令時，會由此類別自動觸發處理邏輯。
     /// </summary>
-    public class AllPhotoOriginalAnalysisConsumer : IConsumer<AllPhotoOriginalAnalysisCommand>
+    public class PhotoPipelineExecutionConsumer : IConsumer<PhotoPipelineExecuteCommand>
     {
         private readonly ApiForwardingHelper _apiForwardingHelper;
 
-        public AllPhotoOriginalAnalysisConsumer
+        public PhotoPipelineExecutionConsumer
         (
             ApiForwardingHelper apiForwardingHelper
         )
@@ -21,11 +21,11 @@ namespace ConsumerConsoleApp.Consumers
         }
 
 
-        public async Task Consume(ConsumeContext<AllPhotoOriginalAnalysisCommand> context)
+        public async Task Consume(ConsumeContext<PhotoPipelineExecuteCommand> context)
         {
             await _apiForwardingHelper.ForwardCommandAsync(
-                nameof(AllPhotoOriginalAnalysisConsumer),
-                context.Message.AllPhotoAnalysisPara
+                nameof(PhotoPipelineExecutionConsumer),
+                context.Message.PhotoPipelinePara
             );
         }
     }

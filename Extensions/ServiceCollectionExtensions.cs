@@ -103,13 +103,14 @@ namespace ConsumerConsoleApp.Extensions
 
 
         /// <summary>
-        /// 註冊所有 MassTransit Consumer 類別
+        /// 註冊所有 MassTransit Consumer 類別。
+        /// 如果有新的 Consumer，只要在這裡新增即可
         /// </summary>
         /// <param name="x">MassTransit 配置物件</param>
         public static void RegisterAllConsumers(this IBusRegistrationConfigurator x)
         {
             x.AddConsumer<AllPhotoOriginalAnalysisConsumer>();
-            // 如果有新的 Consumer，只要在這裡新增即可
+            x.AddConsumer<PhotoPipelineExecutionConsumer>();
         }
 
         /// <summary>
@@ -119,12 +120,18 @@ namespace ConsumerConsoleApp.Extensions
         /// <param name="context">BusRegistrationContext</param>
         public static void ConfigureQueues(this IRabbitMqBusFactoryConfigurator cfg, IBusRegistrationContext context)
         {
-            //3. QueueKey 與 Consumer 綁定
             cfg.ReceiveEndpoint(QueueKey.AllPhotoOriginalAnalysis.ToQueueName(), e =>
             {
                 e.PrefetchCount = 3; // 一次最多取x個訊息進來
                 e.ConcurrentMessageLimit = 1;  // 每次只處理x筆 
                 e.ConfigureConsumer<AllPhotoOriginalAnalysisConsumer>(context);   // 將 Consumer 綁定到此佇列
+            });
+
+            cfg.ReceiveEndpoint(QueueKey.PhotoPipelineExecution.ToQueueName(), e =>
+            {
+                e.PrefetchCount = 3; // 一次最多取x個訊息進來
+                e.ConcurrentMessageLimit = 1;  // 每次只處理x筆 
+                e.ConfigureConsumer<PhotoPipelineExecutionConsumer>(context);   // 將 Consumer 綁定到此佇列
             });
         }
     }
